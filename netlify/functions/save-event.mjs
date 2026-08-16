@@ -1,0 +1,2 @@
+import {getStore} from "@netlify/blobs";import {response,body,valid,clean} from "./_shared.mjs";
+export default async(req)=>{if(req.method!=="POST")return response({error:"Method not allowed"},405);const p=await body(req);if(!valid(p))return response({error:"Invalid event data"},400);const store=getStore("escape-events");const id="event/"+p.sessionId+"/"+Date.now()+"-"+crypto.randomUUID();await store.setJSON(id,{...clean(p),timestamp:new Date().toISOString()},{onlyIfNew:true});return response({ok:true});};

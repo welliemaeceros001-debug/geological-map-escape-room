@@ -1,0 +1,2 @@
+import {getStore} from "@netlify/blobs";import {headers,response,body,valid,clean} from "./_shared.mjs";
+export default async(req)=>{if(req.method!=="POST")return response({error:"Method not allowed"},405);const p=await body(req);if(!valid(p))return response({error:"Invalid session data"},400);const store=getStore("escape-results");await store.setJSON("result/"+p.sessionId,{...clean(p),updatedAt:new Date().toISOString()});return response({ok:true});};
